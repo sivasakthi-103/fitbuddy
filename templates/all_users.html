@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy Admin – All Users</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="brand">
+      🏋️ FitBuddy <span>Coach Admin</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/">Generate New Plan</a>
+      <a href="/view-all-users" class="active">All Users</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="hero-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h1 style="font-size: 1.8rem; margin-bottom: 4px;">Registered Users & Plans Directory</h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Scenario 4 Coach Oversight: Monitor client fitness goals, review original plans, and inspect feedback adaptations.
+          </p>
+        </div>
+        <a href="/" class="btn btn-secondary">+ Add User</a>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Weight</th>
+              <th>Goal</th>
+              <th>Intensity</th>
+              <th>Plan Status</th>
+              <th>Feedback Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr>
+              <td><code>{{ user.user_id }}</code></td>
+              <td><strong>{{ user.username }}</strong></td>
+              <td>{{ user.age }} yrs</td>
+              <td>{{ user.weight }} kg</td>
+              <td><span class="badge badge-green">{{ user.goal }}</span></td>
+              <td><span class="badge badge-orange">{{ user.intensity }}</span></td>
+              <td>
+                {% if user.plan and user.plan.updated_plan %}
+                  <span class="badge badge-blue">Updated (v2)</span>
+                {% elif user.plan %}
+                  <span class="badge badge-green">Original (v1)</span>
+                {% else %}
+                  <span style="color: #64748b;">No Plan</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.plan and user.plan.feedback %}
+                  <span style="font-size: 0.85rem; color: #cbd5e1;">"{{ user.plan.feedback }}"</span>
+                {% else %}
+                  <span style="color: #64748b;">None</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 32px;">
+                No users registered yet. Submit the form on the homepage to generate a plan.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

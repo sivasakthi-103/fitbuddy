@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your FitBuddy Plan – {{ username }}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="brand">
+      🏋️ FitBuddy <span>AI</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/">New Plan</a>
+      <a href="/view-all-users">Admin Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- User Profile Summary -->
+    <div class="hero-card" style="margin-top: 10px; padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h2 style="font-size: 1.5rem; margin-bottom: 6px;">{{ username }}'s Fitness Blueprint</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            User ID: <strong>{{ user_id }}</strong> | Age: <strong>{{ age }}</strong> | Weight: <strong>{{ weight }} kg</strong>
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <span class="badge badge-green">{{ goal }}</span>
+          <span class="badge badge-orange">{{ intensity }} intensity</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Targeted Nutrition Tip -->
+    <div class="tip-box">
+      <div class="tip-title">
+        🥗 Targeted Nutrition & Recovery Advice (Gemini Flash)
+      </div>
+      <p style="line-height: 1.6; color: #f1f5f9;">
+        {{ nutrition_tip }}
+      </p>
+    </div>
+
+    {% if updated_plan %}
+    <!-- Revised Plan (Scenario 2) -->
+    <div class="hero-card" style="border-color: rgba(16, 185, 129, 0.4);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="color: #34d399; font-size: 1.3rem;">⚡ Revised 7-Day Plan (Post-Feedback)</h3>
+        <span class="badge badge-green">Updated via Feedback</span>
+      </div>
+      {% if feedback %}
+      <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 12px;">
+        <strong>Your Feedback:</strong> "{{ feedback }}"
+      </p>
+      {% endif %}
+      <pre class="plan-pre">{{ updated_plan }}</pre>
+    </div>
+    {% endif %}
+
+    <!-- 7-Day Workout Plan -->
+    <div class="hero-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="font-size: 1.3rem;">
+          {% if updated_plan %}Original Generated 7-Day Plan{% else %}Personalized 7-Day Workout Plan{% endif %}
+        </h3>
+        <span class="badge badge-blue">Gemini Generated</span>
+      </div>
+      <pre class="plan-pre">{{ workout_plan }}</pre>
+    </div>
+
+    <!-- Feedback Form (Scenario 2) -->
+    <div class="hero-card" style="margin-top: 24px; border-color: rgba(6, 182, 212, 0.3);">
+      <h3 style="font-size: 1.25rem; margin-bottom: 8px;">🔄 Refine Your Plan (AI Feedback Loop)</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+        Want adjustments? Ask for more cardio, swap an exercise for joint safety, reduce lifting days, or add yoga. FitBuddy will regenerate your plan accordingly.
+      </p>
+
+      <form action="/submit-feedback" method="POST">
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+        <div class="form-group">
+          <label for="feedback">Your Requested Changes</label>
+          <textarea id="feedback" name="feedback" rows="3" placeholder="e.g., Please add 15 minutes of HIIT cardio after upper body days, and replace squats due to slight knee tenderness." required></textarea>
+        </div>
+        <div style="margin-top: 16px;">
+          <button type="submit" class="btn" style="background: var(--accent-cyan); color: #042027;">
+            ⚡ Update Workout Plan with Feedback
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
